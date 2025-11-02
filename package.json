@@ -1,0 +1,11 @@
+{
+  "name": "backend-estacionaya",
+  "version": "1.0.0",
+  "description": "Backend demo usando Serverless + LocalStack para simular AWS (DynamoDB, SQS).\r Incluye: auth, parkings, spaces, reservations, stripe payments (test), IA endpoints.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
