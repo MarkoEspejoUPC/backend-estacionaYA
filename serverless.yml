@@ -1,0 +1,142 @@
+service: backend-estacionaya
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    DYNAMO_TABLE: EstacionaYaDemo
+    QUEUE_URL: http://127.0.0.1:4566/000000000000/estacionaya-queue
+    JWT_SECRET: ${env:JWT_SECRET}
+    STRIPE_SECRET: ${env:STRIPE_SECRET}
+  lambdaHashingVersion: 20201221
+  timeout: 20
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+  - serverless-localstack
+
+custom:
+  localstack:
+    stages: [local]
+    host: http://localhost
+    edgePort: 4566
+    autostart: true
+    endpoints:
+      SQS: http://localhost:4566
+      DynamoDB: http://localhost:4566
+      Lambda: http://localhost:4566
+      APIGateway: http://localhost:4566
+
+functions:
+  # Auth
+  registerUser:
+    handler: src/handlers/auth/registerUser.handler
+    events:
+      - http:
+          path: auth/register
+          method: post
+    timeout: 20
+  loginUser:
+    handler: src/handlers/auth/loginUser.handler
+    events:
+      - http:
+          path: auth/login
+          method: post
+
+  # Parkings
+  registerParking:
+    handler: src/handlers/parking/registerParking.handler
+    events:
+      - http:
+          path: parkings
+          method: post
+  listParkings:
+    handler: src/handlers/parking/listParkings.handler
+    events:
+      - http:
+          path: parkings
+          method: get
+
+  # Spaces
+  registerSpace:
+    handler: src/handlers/spaces/registerSpace.handler
+    events:
+      - http:
+          path: parkings/{id}/spaces
+          method: post
+  listSpaces:
+    handler: src/handlers/spaces/listSpaces.handler
+    events:
+      - http:
+          path: parkings/{id}/spaces
+          method: get
+
+  # IA endpoints
+  detectSpaces:
+    handler: src/handlers/ia/detectSpaces.handler
+    events:
+      - http:
+          path: detect
+          method: post
+  recognizePlate:
+    handler: src/handlers/ia/recognizePlate.handler
+    events:
+      - http:
+          path: plate
+          method: post
+
+  # Reservations
+  createReservation:
+    handler: src/handlers/reservations/createReservation.handler
+    events:
+      - http:
+          path: reservations
+          method: post
+
+  # Payments
+  processExitPayment:
+    handler: src/handlers/payments/processExitPayment.handler
+    events:
+      - http:
+          path: payments/exit
+          method: post
+
+  webhookStripe:
+    handler: src/handlers/payments/webhookStripe.handler
+    events:
+      - http:
+          path: webhook/stripe
+          method: post
+
+  # SQS consumer
+  registerParkingEvent:
+    handler: src/handlers/sqs/registerParkingEvent.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - EstacionaYaQueue
+              - Arn
+
+resources:
+  Resources:
+    EstacionaYaTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${env:DYNAMO_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    EstacionaYaQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: estacionaya-queue

@@ -1,11 +1,23 @@
 {
   "name": "backend-estacionaya",
   "version": "1.0.0",
-  "description": "Backend demo usando Serverless + LocalStack para simular AWS (DynamoDB, SQS).\r Incluye: auth, parkings, spaces, reservations, stripe payments (test), IA endpoints.",
-  "main": "index.js",
+  "description": "Backend demo para EstacionaYa - Serverless + LocalStack",
+  "main": "src/handlers/ia/detectSpaces.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "serverless offline start --stage local",
+    "deploy": "serverless deploy",
+    "invoke:detect": "serverless invoke local -f detectSpaces"
   },
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "aws-sdk": "^2.1494.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "stripe": "^12.14.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.39.0",
+ "serverless-offline": "^13.3.2",
+  "serverless-localstack": "1.1.0"
+  }
 }

@@ -1,0 +1,7 @@
+{
+  "spaces": [
+    { "id": "A1", "status": "OCCUPIED", "plate": "ABC123", "label": "A1" },
+    { "id": "A2", "status": "FREE", "plate": null, "label": "A2" },
+    { "id": "A3", "status": "OCCUPIED", "plate": "XYZ987", "label": "A3" }
+  ]
+}
