@@ -12,7 +12,7 @@
     { "id": "10", "status": "OCCUPIED",     "plate": null,     "label": "A10" },
     { "id": "11", "status": "FREE",     "plate": null,     "label": "A11" },
     { "id": "12", "status": "OCCUPIED", "plate": "TST444", "label": "A12" },
-    { "id": "13", "status": "OCCUPIED",     "plate": null,     "label": "A13" },
+    { "id": "13", "status": "FREE",     "plate": null,     "label": "A13" },
     { "id": "14", "status": "FREE",     "plate": null,     "label": "A14" },
     { "id": "15", "status": "FREE",     "plate": null,     "label": "A15" },
     { "id": "16", "status": "FREE",     "plate": null,     "label": "A16" },

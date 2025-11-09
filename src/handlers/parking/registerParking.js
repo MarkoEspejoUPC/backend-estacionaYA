@@ -5,7 +5,7 @@ const { success, error, created } = require('../../utils/response');
 module.exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body || '{}');
-    const { name, address, totalSpaces, lat, lng } = body;
+    const { name, address, totalSpaces, lat, lng, imgURL } = body;
     if (!name) return error('name requerido', 400);
 
     const parking = {
@@ -14,6 +14,7 @@ module.exports.handler = async (event) => {
       name,
       address: address || null,
       totalSpaces: totalSpaces || 0,
+      imgURL: imgURL || null,
       lat: lat || null,
       lng: lng || null,
       createdAt: new Date().toISOString()

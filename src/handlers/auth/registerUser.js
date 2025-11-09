@@ -15,7 +15,6 @@ module.exports.handler = async (event) => {
       name: name || null,
       email,
       passwordHash: await hash(password),
-      plate: plate || null,
       createdAt: new Date().toISOString()
     };
 
